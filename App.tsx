@@ -1,45 +1,57 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import {createStaticNavigation} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {BluetoothScreen} from './android/app/src/screens/BluetoothScreen';
+import {ControlScreen} from './android/app/src/screens/ControlScreen';
+import {MapScreen} from './android/app/src/screens/MapScreen';
+import {MessagesScreen} from './android/app/src/screens/MessagesScreen';
+import {Text} from 'react-native';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+const RootTabs = createBottomTabNavigator({
+  screenOptions: {
+    tabBarActiveTintColor: '#2563eb',
+    tabBarInactiveTintColor: '#64748b',
+    headerStyle: {
+      backgroundColor: '#ffffff',
+    },
+    headerTitleStyle: {
+      fontWeight: '900',
+    },
+    freezeOnBlur: true,
+  },
+  screens: {
+    Bluetooth: {
+      screen: BluetoothScreen,
+      options: {
+        title: 'Robot',
+        tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>ᛒ</Text>,
+      },
+    },
+    Control: {
+      screen: ControlScreen,
+      options: {
+        title: 'Control',
+        tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🎮</Text>,
+      },
+    },
+    Map: {
+      screen: MapScreen,
+      options: {
+        title: 'Map',
+        tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🗺️</Text>,
+      },
+    },
+    Messages: {
+      screen: MessagesScreen,
+      options: {
+        title: 'Messages',
+        tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>▤</Text>,
+      },
+    },
   },
 });
 
-export default App;
+const Navigation = createStaticNavigation(RootTabs);
+
+export default function App() {
+  return <Navigation />;
+}

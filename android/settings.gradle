@@ -1,6 +1,15 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> 
+    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+        def npxPath = ["/usr/local/bin/npx", "/opt/homebrew/bin/npx"].find { new java.io.File(it).exists() }
+        if (npxPath) {
+            ex.autolinkLibrariesFromCommand([npxPath, "@react-native-community/cli", "config"])
+            return
+        }
+    }
+    ex.autolinkLibrariesFromCommand()
+}
 rootProject.name = 'BotCommander2'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
